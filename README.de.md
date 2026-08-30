@@ -70,3 +70,7 @@ Für eine punktuelle Reifegradbewertung mit Punktzahl pro Achse und Vergleich ü
 ---
 
 > **ReUse-CH hilft jeder Verwaltung, die Digitalisierung als Gemeingut zu gestalten: nützlich für die Gesellschaft, wirtschaftlich beherrscht und ökologisch massvoll.**
+
+---
+
+*Transparenz: Die Strukturierung und ein Teil der Formulierung dieses Rahmens erfolgten mit Unterstützung eines KI-Tools (Claude, Anthropic). Der Inhalt wurde vom Maintainer gegengelesen, korrigiert und freigegeben; für allfällige Fehler bleibt er verantwortlich.*

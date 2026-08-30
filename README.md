@@ -66,3 +66,7 @@ Pour une évaluation de maturité ponctuelle, avec score par axe et comparaison 
 ---
 
 > **ReUse-CH aide chaque administration à faire du numérique un bien commun : utile pour la société, maîtrisé économiquement et sobre environnementalement.**
+
+---
+
+*Transparence : la structuration et une partie de la rédaction de ce cadre ont été assistées par un outil d'IA (Claude, Anthropic). Le contenu a été relu, corrigé et validé par le mainteneur ; toute erreur reste de sa responsabilité.*
