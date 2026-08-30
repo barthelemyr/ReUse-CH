@@ -1,5 +1,8 @@
-# Glossaire – Questionnaire ReUse IT
-Un glossaire ISIT plus complet concernant le numérique responsable est disponible ici: https://fr.wiki.isit-europe.org/nr/Accueil
+# Glossaire ReUse-CH
+
+> Outil du cadre **ReUse-CH** · [Documentation](../docs/README.md) · Licence [CC BY-SA 4.0](../LICENSE.md)
+
+Un glossaire ISIT plus complet concernant le numérique responsable est disponible ici : https://fr.wiki.isit-europe.org/nr/Accueil
 
 ## Accessibilité numérique (eAccessibility)
 Conception de services et sites web utilisables par toutes et tous, y compris les personnes en situation de handicap (visuel, auditif, moteur, cognitif).

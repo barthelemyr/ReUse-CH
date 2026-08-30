@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="fr-CH">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Checklist ReUse-CH avant tout nouveau projet numérique : outil pour les administrations publiques suisses. Aucun cookie, aucun script tiers, aucune donnée collectée.">
+<title>Checklist avant-projet · ReUse-CH</title>
+<style>
+:root{
+  --paper:#FAFAF8; --ink:#1A1C1E; --muted:#565A54; --line:#D8D6D0;
+  --pine:#1E5B45; --pine-soft:#E7F0EB; --red:#D52B1E;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  --sans:"Helvetica Neue",Helvetica,Arial,system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root{ --paper:#16181A; --ink:#EDEDEA; --muted:#A6AAA2; --line:#3A3D40;
+         --pine:#5BBF95; --pine-soft:#1F2E28; --red:#FF5A4E; }
+}
+*{box-sizing:border-box; margin:0}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto} *{transition:none !important} }
+body{background:var(--paper); color:var(--ink); font-family:var(--sans); line-height:1.55; font-size:1rem}
+a{color:var(--pine)}
+a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid var(--pine); outline-offset:2px}
+.skip{position:absolute; left:-999px; top:0; background:var(--ink); color:var(--paper); padding:.6rem 1rem; z-index:20}
+.skip:focus{left:.5rem; top:.5rem}
+.wrap{max-width:52rem; margin:0 auto; padding:0 1.25rem}
+
+/* ---------- entête ---------- */
+header.site{border-bottom:3px solid var(--ink); padding:1.4rem 0 1.2rem}
+.brand{display:flex; align-items:center; gap:.6rem; font-weight:800; letter-spacing:-.01em}
+.brand .ch{background:var(--red); color:#fff; font-size:.8rem; font-weight:800; padding:.15rem .45rem; letter-spacing:.05em}
+.brand .v{font:600 .75rem var(--mono); color:var(--muted); border:1px solid var(--line); padding:.1rem .4rem}
+h1{font-size:clamp(2rem,6vw,3.4rem); font-weight:800; letter-spacing:-.03em; line-height:1.02; margin:.9rem 0 .6rem}
+.lede{color:var(--muted); max-width:38rem}
+nav.jump{display:flex; flex-wrap:wrap; gap:.4rem; margin-top:1.1rem}
+nav.jump a{font:600 .8rem var(--mono); text-decoration:none; color:var(--ink); border:2px solid var(--ink); padding:.35rem .7rem}
+nav.jump a:hover{background:var(--ink); color:var(--paper)}
+
+/* ---------- barre de progression (activée par JS) ---------- */
+#prog{position:sticky; top:0; z-index:10; background:var(--paper); border-bottom:2px solid var(--ink); display:none}
+#prog .wrap{display:flex; align-items:center; gap:.8rem; padding-top:.45rem; padding-bottom:.45rem}
+#prog .lbl{font:600 .72rem var(--mono); white-space:nowrap}
+#prog .bar{flex:1; height:.55rem; background:var(--line)}
+#prog .fill{height:100%; width:0%; background:var(--pine); transition:width .25s}
+body.js #prog{display:block}
+
+/* ---------- sections ---------- */
+section{padding:2.4rem 0; border-bottom:1px solid var(--line)}
+.eyebrow{font:700 .72rem var(--mono); letter-spacing:.14em; text-transform:uppercase; color:var(--red)}
+h2{font-size:clamp(1.4rem,3.5vw,2rem); font-weight:800; letter-spacing:-.02em; margin:.3rem 0 1rem}
+h2 .count{font:600 .95rem var(--mono); color:var(--muted); font-weight:600}
+.note{background:var(--pine-soft); border-left:4px solid var(--pine); padding:.8rem 1rem; margin:1rem 0; font-size:.95rem}
+.grid2{display:grid; gap:1rem; grid-template-columns:1fr}
+@media(min-width:640px){ .grid2{grid-template-columns:1fr 1fr} }
+.card{border:2px solid var(--ink); padding:1.1rem}
+.card h3{font-size:1.05rem; margin-bottom:.3rem}
+.card p{color:var(--muted); font-size:.92rem}
+.card a.go{display:inline-block; margin-top:.7rem; font:600 .8rem var(--mono); text-decoration:none; color:var(--paper); background:var(--pine); padding:.45rem .8rem}
+
+/* ---------- questions express ---------- */
+fieldset.q{border:0; border-top:1px solid var(--line); padding:1rem 0 1rem 2.9rem; position:relative}
+fieldset.q legend{float:left; width:100%; padding:0; font-weight:600} /* neutralise le rendu natif du legend */
+.qnum{position:absolute; left:0; top:1.15rem; font:700 1rem var(--mono); color:var(--muted)}
+.choices{clear:both; display:flex; gap:.5rem; flex-wrap:wrap; padding-top:.55rem}
+.choices label{display:flex; align-items:center; gap:.4rem; border:2px solid var(--line); padding:.35rem .8rem; cursor:pointer; font-size:.9rem}
+.choices label:hover{border-color:var(--ink)}
+.choices input{accent-color:var(--pine); width:1.05rem; height:1.05rem}
+.choices label:has(input:checked){border-color:var(--pine); background:var(--pine-soft); font-weight:600}
+.choices label:has(input[value="non"]:checked){border-color:var(--red)}
+
+/* ---------- sections complètes ---------- */
+.bloc{margin-top:1.6rem}
+.bloc-head{display:flex; align-items:baseline; gap:.8rem; border-top:3px solid var(--ink); padding-top:.6rem}
+.bloc-letter{font:800 2rem var(--sans); letter-spacing:-.02em; color:var(--red)}
+.bloc-head h3{font-size:1.1rem; font-weight:800}
+.bloc-head .count{margin-left:auto; font:600 .8rem var(--mono); color:var(--muted)}
+.bloc p.sub{color:var(--muted); font-size:.9rem; font-style:italic; margin:.2rem 0 .4rem}
+ul.check{list-style:none; padding:0}
+ul.check li{border-top:1px solid var(--line)}
+ul.check label{display:grid; grid-template-columns:1.4rem 1fr; gap:.7rem; padding:.65rem 0; cursor:pointer; align-items:start}
+ul.check input{accent-color:var(--pine); width:1.15rem; height:1.15rem; margin-top:.2rem}
+ul.check label:has(input:checked) span{color:var(--muted); }
+
+/* ---------- fiche de décision ---------- */
+form.fiche{display:grid; gap:1rem; margin-top:1rem}
+form.fiche label.fld{display:grid; gap:.3rem; font-weight:600; font-size:.92rem}
+form.fiche input[type=text], form.fiche input[type=date], form.fiche textarea{
+  font:inherit; color:var(--ink); background:var(--paper);
+  border:2px solid var(--ink); padding:.55rem .7rem; width:100%}
+form.fiche textarea{min-height:4.2rem; resize:vertical}
+.decision-choices{display:flex; flex-wrap:wrap; gap:.5rem}
+.decision-choices label{border:2px solid var(--ink); padding:.5rem .9rem; cursor:pointer; font-weight:600; display:flex; gap:.45rem; align-items:center}
+.decision-choices input{accent-color:var(--pine)}
+.decision-choices label:has(input:checked){background:var(--ink); color:var(--paper)}
+.recap{border:3px solid var(--ink); padding:1.2rem; margin-top:1.6rem}
+.recap .stamp{display:inline-block; font:800 .8rem var(--mono); letter-spacing:.12em; color:var(--red); border:2px solid var(--red); padding:.2rem .6rem; margin-bottom:.8rem}
+.recap dl{display:grid; gap:.5rem}
+.recap dt{font:700 .72rem var(--mono); letter-spacing:.1em; text-transform:uppercase; color:var(--muted)}
+.recap dd{margin:0 0 .4rem; white-space:pre-wrap}
+.recap dd:empty::before, .recap dd.vide::before{content:"—"; color:var(--muted)}
+#alertes li{color:var(--red); font-size:.92rem}
+#alertes:empty + p.ok{display:block}
+.actions{display:flex; gap:.6rem; flex-wrap:wrap; margin-top:1.2rem}
+button{font:700 .9rem var(--sans); padding:.65rem 1.1rem; cursor:pointer; border:2px solid var(--ink); background:var(--ink); color:var(--paper)}
+button.ghost{background:transparent; color:var(--ink)}
+button:hover{background:var(--pine); border-color:var(--pine); color:#fff}
+
+/* ---------- pied ---------- */
+footer.site{padding:2rem 0 3rem; font-size:.85rem; color:var(--muted)}
+footer.site .pledge{border-left:4px solid var(--pine); padding-left:1rem; margin-bottom:1rem}
+footer.site a{color:inherit}
+
+/* ---------- impression ---------- */
+@media print{
+  body{background:#fff; color:#000; font-size:10.5pt}
+  .skip, nav.jump, #prog, .actions, .card a.go, footer .no-print{display:none !important}
+  section{border:0; padding:1rem 0; break-inside:avoid-page}
+  .recap{break-inside:avoid}
+  a{color:#000; text-decoration:none}
+  .choices label{border:1px solid #000}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Aller au contenu</a>
+
+<header class="site">
+  <div class="wrap">
+    <p class="brand">ReUse<span class="ch">CH</span> <span class="v">v0.1 · co-construction</span></p>
+    <h1>Checklist avant&#8209;projet</h1>
+    <p class="lede">À parcourir <strong>avant</strong> tout nouveau projet, achat, développement ou renouvellement numérique : réutiliser, mesurer, partager, concevoir pour l'utilisateur, sécuriser par défaut.</p>
+    <nav class="jump" aria-label="Sommaire">
+      <a href="#express">1 · Version express</a>
+      <a href="#complete">2 · Version complète</a>
+      <a href="#decision">3 · Fiche de décision</a>
+    </nav>
+  </div>
+</header>
+
+<div id="prog" aria-hidden="true">
+  <div class="wrap">
+    <span class="lbl" id="prog-lbl">0 / 10 répondu</span>
+    <div class="bar"><div class="fill" id="prog-fill"></div></div>
+  </div>
+</div>
+
+<main id="main">
+
+<section aria-labelledby="t-quand">
+  <div class="wrap">
+    <p class="eyebrow">Proportionnalité</p>
+    <h2 id="t-quand">Quelle version pour votre projet&nbsp;?</h2>
+    <p><em>Just enough, just in time, just for the risk</em> : l'effort de vérification doit rester proportionné à l'enjeu.</p>
+    <div class="grid2" style="margin-top:1rem">
+      <div class="card">
+        <h3>Version express (10 questions)</h3>
+        <p>Petit projet, données non sensibles, faible coût, faible dépendance. Environ 15 minutes.</p>
+        <a class="go" href="#express">Commencer l'express</a>
+      </div>
+      <div class="card">
+        <h3>Version complète (sections A à G)</h3>
+        <p>Projet critique, données personnelles ou sensibles, contrat structurant, forte dépendance fournisseur.</p>
+        <a class="go" href="#complete">Commencer la complète</a>
+      </div>
+    </div>
+    <p class="note">Rien n'est enregistré ni transmis&nbsp;: vos réponses restent dans cette page. Pour les conserver, utilisez «&nbsp;Imprimer / PDF&nbsp;» en bas de page.</p>
+  </div>
+</section>
+
+<section id="express" aria-labelledby="t-express">
+  <div class="wrap">
+    <p class="eyebrow">Version express</p>
+    <h2 id="t-express">Dix questions <span class="count" id="c-express" aria-live="polite"></span></h2>
+    <p class="lede">Toute réponse «&nbsp;Non&nbsp;» sans justification devrait faire l'objet d'une discussion avant décision.</p>
+
+    <fieldset class="q"><legend class="qtext">Le besoin est-il réel, exprimé par les utilisateurs et non couvert par un outil existant en interne&nbsp;?</legend>
+      <span class="qnum" aria-hidden="true">01</span>
+      <div class="choices" data-short="Besoin réel et non couvert en interne">
+        <label><input type="radio" name="q1" value="oui">Oui</label>
+        <label><input type="radio" name="q1" value="non">Non</label>
+        <label><input type="radio" name="q1" value="na">N/A</label>
+      </div>
+    </fieldset>
+    <fieldset class="q"><legend class="qtext">Avons-nous vérifié si une autre commune, le canton, la Confédération ou une plateforme mutualisée propose déjà une solution réutilisable&nbsp;?</legend>
+      <span class="qnum" aria-hidden="true">02</span>
+      <div class="choices" data-short="Réutilisation externe vérifiée (communes, canton, Confédération)">
+        <label><input type="radio" name="q2" value="oui">Oui</label>
+        <label><input type="radio" name="q2" value="non">Non</label>
+        <label><input type="radio" name="q2" value="na">N/A</label>
+      </div>
+    </fieldset>
+    <fieldset class="q"><legend class="qtext">Avons-nous vérifié l'existence d'une solution open source pertinente&nbsp;?</legend>
+      <span class="qnum" aria-hidden="true">03</span>
+      <div class="choices" data-short="Solutions open source vérifiées">
+        <label><input type="radio" name="q3" value="oui">Oui</label>
+        <label><input type="radio" name="q3" value="non">Non</label>
+        <label><input type="radio" name="q3" value="na">N/A</label>
+      </div>
+    </fieldset>
+    <fieldset class="q"><legend class="qtext">Connaissons-nous le coût complet (acquisition, exploitation, maintenance, formation, sortie) et pas seulement le prix d'achat&nbsp;?</legend>
+      <span class="qnum" aria-hidden="true">04</span>
+      <div class="choices" data-short="Coût complet connu (y compris sortie)">
+        <label><input type="radio" name="q4" value="oui">Oui</label>
+        <label><input type="radio" name="q4" value="non">Non</label>
+        <label><input type="radio" name="q4" value="na">N/A</label>
+      </div>
+    </fieldset>
+    <fieldset class="q"><legend class="qtext">Les données traitées, leur sensibilité et leur lieu d'hébergement sont-ils identifiés&nbsp;?</legend>
+      <span class="qnum" aria-hidden="true">05</span>
+      <div class="choices" data-short="Données et hébergement identifiés">
+        <label><input type="radio" name="q5" value="oui">Oui</label>
+        <label><input type="radio" name="q5" value="non">Non</label>
+        <label><input type="radio" name="q5" value="na">N/A</label>
+      </div>
+    </fieldset>
+    <fieldset class="q"><legend class="qtext">Les exigences minimales de sécurité et de protection des données (LPD) sont-elles couvertes&nbsp;?</legend>
+      <span class="qnum" aria-hidden="true">06</span>
+      <div class="choices" data-short="Exigences sécurité / LPD couvertes">
+        <label><input type="radio" name="q6" value="oui">Oui</label>
+        <label><input type="radio" name="q6" value="non">Non</label>
+        <label><input type="radio" name="q6" value="na">N/A</label>
+      </div>
+    </fieldset>
+    <fieldset class="q"><legend class="qtext">Pourrons-nous récupérer nos données et changer de solution si nécessaire (réversibilité)&nbsp;?</legend>
+      <span class="qnum" aria-hidden="true">07</span>
+      <div class="choices" data-short="Réversibilité assurée">
+        <label><input type="radio" name="q7" value="oui">Oui</label>
+        <label><input type="radio" name="q7" value="non">Non</label>
+        <label><input type="radio" name="q7" value="na">N/A</label>
+      </div>
+    </fieldset>
+    <fieldset class="q"><legend class="qtext">La solution sera-t-elle accessible (eCH&#8209;0059 / WCAG) et utilisable par les publics concernés&nbsp;?</legend>
+      <span class="qnum" aria-hidden="true">08</span>
+      <div class="choices" data-short="Accessibilité (eCH-0059 / WCAG) prévue">
+        <label><input type="radio" name="q8" value="oui">Oui</label>
+        <label><input type="radio" name="q8" value="non">Non</label>
+        <label><input type="radio" name="q8" value="na">N/A</label>
+      </div>
+    </fieldset>
+    <fieldset class="q"><legend class="qtext">La documentation minimale (configuration, interfaces, responsabilités) est-elle prévue&nbsp;?</legend>
+      <span class="qnum" aria-hidden="true">09</span>
+      <div class="choices" data-short="Documentation minimale prévue">
+        <label><input type="radio" name="q9" value="oui">Oui</label>
+        <label><input type="radio" name="q9" value="non">Non</label>
+        <label><input type="radio" name="q9" value="na">N/A</label>
+      </div>
+    </fieldset>
+    <fieldset class="q"><legend class="qtext">La décision (réutiliser / adapter / acheter / développer) est-elle documentée avec ses raisons&nbsp;?</legend>
+      <span class="qnum" aria-hidden="true">10</span>
+      <div class="choices" data-short="Décision documentée">
+        <label><input type="radio" name="q10" value="oui">Oui</label>
+        <label><input type="radio" name="q10" value="non">Non</label>
+        <label><input type="radio" name="q10" value="na">N/A</label>
+      </div>
+    </fieldset>
+  </div>
+</section>
+
+<section id="complete" aria-labelledby="t-complete">
+  <div class="wrap">
+    <p class="eyebrow">Version complète</p>
+    <h2 id="t-complete">Sections A à G</h2>
+
+    <div class="bloc" id="blocA">
+      <div class="bloc-head"><span class="bloc-letter" aria-hidden="true">A</span><h3>Utilité et cadrage</h3><span class="count" aria-live="polite"></span></div>
+      <p class="sub">Avant de numériser, questionner l'utilité.</p>
+      <ul class="check">
+        <li><label><input type="checkbox"><span>Le besoin est décrit du point de vue des usagers ou des collaborateurs (pas seulement de la technique).</span></label></li>
+        <li><label><input type="checkbox"><span>La base légale et l'intérêt public sont identifiés si le projet touche des prestations ou des données personnelles.</span></label></li>
+        <li><label><input type="checkbox"><span>La solution est proportionnée au besoin (pas de sur-dimensionnement).</span></label></li>
+        <li><label><input type="checkbox"><span>Une alternative non numérique est maintenue si la prestation s'adresse à la population.</span></label></li>
+        <li><label><input type="checkbox"><span>Le service ou la personne responsable du projet est désigné.</span></label></li>
+      </ul>
+    </div>
+
+    <div class="bloc" id="blocB">
+      <div class="bloc-head"><span class="bloc-letter" aria-hidden="true">B</span><h3>Réutiliser avant tout</h3><span class="count" aria-live="polite"></span></div>
+      <p class="sub">Avant d'acheter, chercher à réutiliser.</p>
+      <ul class="check">
+        <li><label><input type="checkbox"><span>Vérification interne&nbsp;: une solution ou un contrat existant peut-il couvrir le besoin&nbsp;?</span></label></li>
+        <li><label><input type="checkbox"><span>Vérification externe&nbsp;: une autre commune, le canton, la Confédération ou une association intercommunale dispose-t-elle d'une solution réutilisable&nbsp;?</span></label></li>
+        <li><label><input type="checkbox"><span>Vérification des plateformes et services mutualisés existants.</span></label></li>
+        <li><label><input type="checkbox"><span>Vérification des solutions open source pertinentes (p.&nbsp;ex. utilisées par d'autres collectivités suisses).</span></label></li>
+        <li><label><input type="checkbox"><span>Vérification auprès du fournisseur pressenti&nbsp;: existe-t-il une configuration, une extension ou une interface déjà utilisée par d'autres administrations&nbsp;?</span></label></li>
+        <li><label><input type="checkbox"><span>Les standards applicables (eCH, DCAT-AP-CH, formats ouverts) sont identifiés.</span></label></li>
+        <li><label><input type="checkbox"><span>La décision réutiliser / adapter / acheter / développer est documentée, avec les options écartées et leurs raisons.</span></label></li>
+      </ul>
+    </div>
+
+    <div class="bloc" id="blocC">
+      <div class="bloc-head"><span class="bloc-letter" aria-hidden="true">C</span><h3>Mesurer pour améliorer</h3><span class="count" aria-live="polite"></span></div>
+      <ul class="check">
+        <li><label><input type="checkbox"><span>3 à 5 indicateurs simples sont choisis (p.&nbsp;ex. coût annuel complet, satisfaction, taux d'utilisation, incidents).</span></label></li>
+        <li><label><input type="checkbox"><span>La situation de départ (baseline) est notée pour pouvoir comparer.</span></label></li>
+        <li><label><input type="checkbox"><span>Le coût complet sur le cycle de vie est estimé&nbsp;: acquisition, exploitation, maintenance, support, formation, sécurité, sortie.</span></label></li>
+        <li><label><input type="checkbox"><span>Les coûts récurrents (licences, abonnements) sont inscrits au registre des contrats.</span></label></li>
+      </ul>
+    </div>
+
+    <div class="bloc" id="blocD">
+      <div class="bloc-head"><span class="bloc-letter" aria-hidden="true">D</span><h3>Concevoir pour l'utilisateur</h3><span class="count" aria-live="polite"></span></div>
+      <ul class="check">
+        <li><label><input type="checkbox"><span>Les utilisateurs concernés (usagers et/ou collaborateurs) sont impliqués avant le choix final.</span></label></li>
+        <li><label><input type="checkbox"><span>Un test d'utilisabilité, même simple, est prévu avant la mise en service.</span></label></li>
+        <li><label><input type="checkbox"><span>Les exigences d'accessibilité (eCH-0059 / WCAG) figurent dans le cahier des charges ou le contrat.</span></label></li>
+        <li><label><input type="checkbox"><span>Les publics éloignés du numérique sont pris en compte (langage clair, accompagnement, alternative).</span></label></li>
+      </ul>
+    </div>
+
+    <div class="bloc" id="blocE">
+      <div class="bloc-head"><span class="bloc-letter" aria-hidden="true">E</span><h3>Sécuriser par défaut</h3><span class="count" aria-live="polite"></span></div>
+      <ul class="check">
+        <li><label><input type="checkbox"><span>Les données traitées sont inventoriées&nbsp;; les données personnelles ou sensibles sont identifiées.</span></label></li>
+        <li><label><input type="checkbox"><span>Le lieu d'hébergement et le cadre légal applicable sont connus et acceptables.</span></label></li>
+        <li><label><input type="checkbox"><span>Une analyse de risques proportionnée est réalisée (simple pour un petit outil, approfondie pour un système critique).</span></label></li>
+        <li><label><input type="checkbox"><span>La protection des données est intégrée dès la conception (minimisation, accès, journalisation).</span></label></li>
+        <li><label><input type="checkbox"><span>Les responsabilités sont clarifiées entre l'administration et le prestataire (qui fait quoi en cas d'incident&nbsp;?).</span></label></li>
+        <li><label><input type="checkbox"><span>La gestion des accès et des comptes est définie (arrivées, départs, comptes à privilèges).</span></label></li>
+      </ul>
+    </div>
+
+    <div class="bloc" id="blocF">
+      <div class="bloc-head"><span class="bloc-letter" aria-hidden="true">F</span><h3>Prestataire et contrat</h3><span class="count" aria-live="polite"></span></div>
+      <ul class="check">
+        <li><label><input type="checkbox"><span>Le contrat inclut des clauses de portabilité des données et de réversibilité (format d'export, délais, coûts de sortie).</span></label></li>
+        <li><label><input type="checkbox"><span>La documentation des configurations, interfaces, API et dépendances est exigée comme livrable.</span></label></li>
+        <li><label><input type="checkbox"><span>Un transfert de connaissances vers l'administration est prévu.</span></label></li>
+        <li><label><input type="checkbox"><span>Les coûts récurrents et les coûts de sortie sont rendus visibles dans l'offre.</span></label></li>
+        <li><label><input type="checkbox"><span>Les développements spécifiques sont limités, documentés et si possible réutilisables par d'autres collectivités.</span></label></li>
+        <li><label><input type="checkbox"><span>Le niveau de dépendance au fournisseur est évalué et jugé acceptable.</span></label></li>
+      </ul>
+    </div>
+
+    <div class="bloc" id="blocG">
+      <div class="bloc-head"><span class="bloc-letter" aria-hidden="true">G</span><h3>Partager pour économiser</h3><span class="count" aria-live="polite"></span></div>
+      <p class="sub">Avant de garder pour soi, partager ce qui peut servir aux autres.</p>
+      <ul class="check">
+        <li><label><input type="checkbox"><span>Le cahier des charges, les clauses ou la grille d'évaluation peuvent être partagés avec d'autres administrations.</span></label></li>
+        <li><label><input type="checkbox"><span>Si un développement a lieu&nbsp;: la publication du code (open source) est envisagée.</span></label></li>
+        <li><label><input type="checkbox"><span>Un retour d'expérience est prévu en fin de projet (modèle disponible dans le dépôt ReUse-CH).</span></label></li>
+        <li><label><input type="checkbox"><span>Les données publiques non sensibles produites pourront être ouvertes (open data by default).</span></label></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="decision" aria-labelledby="t-decision">
+  <div class="wrap">
+    <p class="eyebrow">À conserver</p>
+    <h2 id="t-decision">Fiche de décision</h2>
+
+    <form class="fiche" id="fiche">
+      <label class="fld">Projet / besoin
+        <input type="text" id="f-projet" autocomplete="off"></label>
+      <div class="grid2">
+        <label class="fld">Responsable
+          <input type="text" id="f-resp" autocomplete="off"></label>
+        <label class="fld">Date
+          <input type="date" id="f-date"></label>
+      </div>
+      <label class="fld">Options examinées
+        <textarea id="f-options"></textarea></label>
+      <fieldset style="border:0">
+        <legend class="fld" style="font-weight:600; font-size:.92rem; margin-bottom:.4rem">Décision</legend>
+        <div class="decision-choices" id="f-decision">
+          <label><input type="radio" name="dec" value="Réutiliser">Réutiliser</label>
+          <label><input type="radio" name="dec" value="Adapter">Adapter</label>
+          <label><input type="radio" name="dec" value="Acheter">Acheter</label>
+          <label><input type="radio" name="dec" value="Développer">Développer</label>
+          <label><input type="radio" name="dec" value="Abandonner / reporter">Abandonner / reporter</label>
+        </div>
+      </fieldset>
+      <label class="fld">Justification
+        <textarea id="f-justif"></textarea></label>
+      <label class="fld">Points de vigilance (sécurité, dépendance, coûts de sortie)
+        <textarea id="f-vigilance"></textarea></label>
+      <div class="grid2">
+        <label class="fld">Indicateurs suivis
+          <textarea id="f-indic"></textarea></label>
+        <label class="fld">Partage prévu (RETEX, cahier des charges, code)
+          <textarea id="f-partage"></textarea></label>
+      </div>
+    </form>
+
+    <div class="recap" id="recap">
+      <span class="stamp">Décision · ReUse-CH</span>
+      <dl>
+        <dt>Projet</dt><dd id="r-projet" class="vide"></dd>
+        <dt>Responsable et date</dt><dd id="r-resp" class="vide"></dd>
+        <dt>Décision</dt><dd id="r-dec" class="vide"></dd>
+        <dt>Justification</dt><dd id="r-justif" class="vide"></dd>
+        <dt>Points «&nbsp;Non&nbsp;» de la checklist express à discuter</dt>
+        <dd><ul id="alertes" style="padding-left:1.1rem"></ul><p class="ok" style="display:none; color:var(--muted)">Aucun (ou checklist non remplie).</p></dd>
+      </dl>
+    </div>
+
+    <div class="actions">
+      <button type="button" id="btn-print">Imprimer / PDF</button>
+      <button type="button" class="ghost" id="btn-reset">Tout effacer</button>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <p class="pledge">Cette page ne dépose <strong>aucun cookie</strong>, ne charge <strong>aucun script ni police tiers</strong> et ne collecte <strong>aucune donnée</strong>. Un seul fichier, polices système, fonctionne hors ligne et sans JavaScript.</p>
+    <p><strong>ReUse-CH</strong> · Cadre volontaire pour une transformation numérique Responsable, Innovante et Mutualisée, v0.1 (co-construction). Contenu sous licence <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.fr">CC&nbsp;BY-SA&nbsp;4.0</a> : libre de partager et d'adapter, avec attribution et même licence.</p>
+    <p class="no-print">Source, documentation et contributions&nbsp;: <a href="https://github.com/barthelemyr/ReUse-CH">github.com/barthelemyr/ReUse-CH</a></p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  document.body.classList.add("js");
+  var $ = function(s, c){ return (c||document).querySelector(s); };
+  var $$ = function(s, c){ return Array.prototype.slice.call((c||document).querySelectorAll(s)); };
+
+  // Progression express
+  var radios = $$("#express input[type=radio]");
+  var groups = 10;
+  function majExpress(){
+    var done = {};
+    radios.forEach(function(r){ if(r.checked) done[r.name] = r.value; });
+    var n = Object.keys(done).length;
+    $("#prog-lbl").textContent = n + " / " + groups + " répondu";
+    $("#prog-fill").style.width = (n/groups*100) + "%";
+    $("#c-express").textContent = "— " + n + "/" + groups;
+    // Alertes "Non" dans la fiche
+    var ul = $("#alertes"); ul.innerHTML = "";
+    $$("#express .choices").forEach(function(ch){
+      var non = ch.querySelector('input[value="non"]');
+      if(non && non.checked){
+        var li = document.createElement("li");
+        li.textContent = ch.getAttribute("data-short");
+        ul.appendChild(li);
+      }
+    });
+    $("#recap .ok").style.display = ul.children.length ? "none" : "block";
+  }
+
+  // Compteurs des sections A–G
+  function majBlocs(){
+    $$(".bloc").forEach(function(b){
+      var boxes = $$("input[type=checkbox]", b);
+      var n = boxes.filter(function(c){ return c.checked; }).length;
+      $(".count", b).textContent = n + " / " + boxes.length;
+    });
+  }
+
+  // Fiche en direct
+  function lier(src, dst, fmt){
+    src.addEventListener("input", function(){
+      var v = fmt ? fmt() : src.value.trim();
+      dst.textContent = v;
+      dst.classList.toggle("vide", !v);
+    });
+  }
+  lier($("#f-projet"), $("#r-projet"));
+  lier($("#f-justif"), $("#r-justif"));
+  function majResp(){
+    var v = [$("#f-resp").value.trim(), $("#f-date").value].filter(Boolean).join(" — ");
+    $("#r-resp").textContent = v; $("#r-resp").classList.toggle("vide", !v);
+  }
+  $("#f-resp").addEventListener("input", majResp);
+  $("#f-date").addEventListener("input", majResp);
+  $$("#f-decision input").forEach(function(r){
+    r.addEventListener("change", function(){
+      $("#r-dec").textContent = r.value; $("#r-dec").classList.remove("vide");
+    });
+  });
+
+  document.addEventListener("change", function(e){
+    if(e.target.matches("#express input[type=radio]")) majExpress();
+    if(e.target.matches(".bloc input[type=checkbox]")) majBlocs();
+  });
+
+  $("#btn-print").addEventListener("click", function(){ window.print(); });
+  $("#btn-reset").addEventListener("click", function(){
+    if(!confirm("Effacer toutes les réponses de cette page ?")) return;
+    $$("input[type=radio], input[type=checkbox]").forEach(function(i){ i.checked = false; });
+    $$("input[type=text], input[type=date], textarea").forEach(function(i){ i.value = ""; });
+    $$(".recap dd").forEach(function(d){ if(d.id){ d.textContent=""; d.classList.add("vide"); } });
+    majExpress(); majBlocs();
+  });
+
+  majExpress(); majBlocs();
+})();
+</script>
+</body>
+</html>

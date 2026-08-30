@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ReUse-CH</title>
+<meta name="theme-color" content="#1a6b3a">
+<meta name="color-scheme" content="light">
+<!-- ReUse-CH — Bootstrap 5.3.8 compilé sur mesure et intégré : aucune requête tierce. -->
+<style>/*__CSS__*/</style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand navbar-dark bg-dark sticky-top d-print-none">
+  <div class="container-xl">
+    <span class="navbar-brand mb-0 h1"><strong>ReUse<span class="brand-ch">-CH</span></strong></span>
+    <div class="btn-group btn-group-sm" role="group" aria-label="FR / DE">
+      <button type="button" class="btn btn-outline-light" data-lang="fr">FR</button>
+      <button type="button" class="btn btn-outline-light" data-lang="de">DE</button>
+    </div>
+  </div>
+</nav>
+
+<div class="container-xl py-4">
+<div class="layout">
+
+  <!-- === A · Identité et profil ================================= -->
+  <section class="lay-head">
+    <div class="masthead mb-4">
+      <h1 class="h3 mb-3" id="x-title"></h1>
+      <p class="definition" id="x-def"></p>
+      <p class="text-secondary small mb-2" id="x-lede"></p>
+      <p class="stamp mb-0" id="x-stamp"></p>
+    </div>
+
+    <details class="panel mb-4" id="pnl-profil">
+      <summary>
+        <span class="panel-title" id="x-h-profil"></span>
+        <span class="panel-meta" id="r-meta"></span>
+      </summary>
+      <div class="panel-body">
+        <label class="form-label small fw-semibold" for="f-nom" id="x-lbl-nom"></label>
+        <input type="text" class="form-control mb-1" id="f-nom" autocomplete="organization">
+        <p class="small text-secondary mb-4" id="x-n1"></p>
+
+        <p class="form-label small fw-semibold mb-1" id="x-h2"></p>
+        <p class="small text-secondary mb-2" id="x-n2"></p>
+        <div class="list-group mb-4" id="f-types"></div>
+
+        <p class="form-label small fw-semibold mb-1" id="x-h2b"></p>
+        <p class="small text-secondary mb-2" id="x-n2b"></p>
+        <div class="list-group mb-4" id="f-niveaux"></div>
+
+        <p class="form-label small fw-semibold mb-1" id="x-h3"></p>
+        <p class="small text-secondary mb-2" id="x-n3"></p>
+        <div id="f-piliers"></div>
+      </div>
+    </details>
+  </section>
+
+  <!-- === B · État et données ====================================
+       Sur mobile : juste après le profil, avant le plan d'action.
+       Sur écran large : colonne de droite, collante.            -->
+  <aside class="lay-side">
+   <div class="side-inner">
+    <div class="card mb-3">
+      <div class="card-body">
+        <h2 class="h6 text-uppercase text-secondary mb-2" style="letter-spacing:.06em;font-size:.6875rem" id="x-sum"></h2>
+        <p class="stat mb-0" id="r-big"></p>
+        <p class="small text-secondary mb-2" id="r-small"></p>
+        <div class="progress-stacked mb-2" style="height:.375rem" id="r-bar"></div>
+        <p class="small text-secondary mb-3" id="r-detail"></p>
+        <div class="d-flex flex-wrap gap-2 small text-secondary mb-3" id="r-keys"></div>
+        <p class="saved mb-0" id="r-saved"></p>
+      </div>
+    </div>
+
+    <details class="panel d-print-none" id="pnl-data">
+      <summary><span class="panel-title" id="x-h-data"></span></summary>
+      <div class="panel-body">
+        <p class="small text-secondary" id="x-storage-note"></p>
+        <div class="d-grid gap-2">
+          <button class="btn btn-primary btn-sm" id="b-exp"></button>
+          <button class="btn btn-outline-secondary btn-sm" id="b-imp"></button>
+          <button class="btn btn-outline-secondary btn-sm" id="b-print"></button>
+          <button class="btn btn-outline-danger btn-sm mt-2" id="b-erase"></button>
+        </div>
+      </div>
+    </details>
+   </div>
+  </aside>
+
+  <!-- === C · Plan d'action ====================================== -->
+  <main class="lay-main">
+    <div class="d-flex justify-content-between align-items-baseline gap-2 mb-2 d-print-none">
+      <h2 class="h6 mb-0" id="x-h-reg"></h2>
+      <button class="btn btn-link btn-sm text-secondary p-0" id="b-toggle"></button>
+    </div>
+
+    <!-- Barre d'outils collante : suit le défilement du plan d'action.
+         L'avancement compact n'apparaît que là où la colonne
+         latérale n'est pas visible. -->
+    <div class="toolbar d-print-none">
+      <div class="tb-row">
+        <span class="tb-count" id="tb-count"></span>
+        <span class="progress-stacked tb-bar" id="tb-bar"></span>
+        <input type="search" class="form-control form-control-sm tb-search" id="f-search">
+      </div>
+      <div class="tb-chips" id="f-filter" role="group"></div>
+    </div>
+
+    <div id="r-groups"></div>
+    <p class="text-secondary small" id="r-empty" hidden></p>
+
+    <details class="panel mt-4" id="pnl-hist">
+      <summary>
+        <span class="panel-title" id="x-h5"></span>
+        <span class="panel-meta" id="r-histcount"></span>
+      </summary>
+      <div class="panel-body" id="r-hist"></div>
+    </details>
+  </main>
+</div>
+
+<footer class="border-top mt-5 pt-3 small text-secondary">
+  <p id="x-foot" class="mb-2"></p>
+  <p id="x-priv" class="mb-0"></p>
+</footer>
+</div>
+
+<dialog id="dlg-erase" aria-labelledby="dlg-title">
+  <form method="dialog">
+    <div class="p-3 border-bottom"><strong id="dlg-title"></strong></div>
+    <div class="p-3"><p class="small mb-0" id="dlg-body"></p></div>
+    <div class="p-3 border-top d-flex flex-wrap gap-2 justify-content-end">
+      <button class="btn btn-sm btn-outline-secondary" value="cancel" id="dlg-cancel"></button>
+      <button class="btn btn-sm btn-danger" value="ok" id="dlg-ok"></button>
+    </div>
+  </form>
+</dialog>
+
+<input type="file" id="f-file" accept="application/json,.json" hidden>
+
+<script>
+"use strict";
+
+/* ===================== TEXTES D'INTERFACE ===================== */
+const UI = {
+ fr:{
+  locale:"fr-CH",
+  title:"Votre plan d'action",
+  lede:"Configurez le cadre ReUse-CH selon la taille, les objectifs et la maturité de votre administration, puis suivez vos pratiques dans le temps.",
+  defLead:"Un ",
+  defCore:'cadre volontaire et flexible pour une transformation numérique <strong>Responsable</strong>, <strong>Innovante</strong> et <strong>Mutualisée</strong> des administrations publiques suisses.',
+  licence:"Publié sous CC BY-SA 4.0.",
+  stamp:"ReUse-CH v0.5 · CC BY-SA 4.0 · Données locales, hors ligne",
+  hProfil:"Profil de l'administration",
+  lblNom:"Nom de l'administration (facultatif)",
+  n1:"Le nom reste sur votre appareil : il n'est jamais transmis.",
+  h2:"Type d'administration", n2:"Détermine le niveau proposé par défaut.",
+  h2b:"Niveau de maturité visé", n2b:"Chaque niveau reprend les pratiques des précédents. Just enough, just in time, just for the risk.",
+  h3:"Priorités", n3:"Les pratiques rattachées aux piliers retenus passent en tête de chaque axe. Aucune n'est masquée.",
+  profilEmpty:"À compléter",
+  hReg:"Les pratiques", hData:"Données et sauvegarde",
+  expandAll:"Tout déplier", collapseAll:"Tout replier",
+  sum:"État d'avancement", small:"pratiques en place",
+  detail:(p,t,na)=>`${p} en cours · ${t} à faire`+(na?` · ${na} écartée${na>1?"s":""}`:""),
+  lblSearch:"Rechercher", searchPlaceholder:"Mot-clé…",
+  lblFilter:"Filtrer",
+  filters:{all:"Toutes", todo:"À faire", prog:"En cours", fait:"En place", prio:"Prioritaires"},
+  emptyFilter:"Aucune pratique ne correspond à ce filtre.",
+  emptyProfil:"Choisissez un type d'administration ou un niveau dans le profil ci-dessus pour composer votre plan d'action.",
+  storageNote:"Vos réponses sont enregistrées dans ce navigateur, sur cet appareil. Exportez le fichier pour en garder une copie, le transmettre ou le reprendre ailleurs. Chaque export inscrit un point de situation daté : c\u0027est ce qui rend la progression lisible d\u0027une année à l\u0027autre.",
+  savedAt:d=>"Enregistré localement · "+d,
+  noStorage:"Enregistrement local indisponible dans ce navigateur : exportez régulièrement.",
+  export:"Exporter le suivi", import:"Importer un suivi", print:"Imprimer", erase:"Effacer les données",
+  eraseTitle:"Effacer les données ?", 
+  eraseBody:"Le profil, les statuts, les notes et les points de situation enregistrés dans ce navigateur seront supprimés définitivement. Les fichiers déjà exportés ne sont pas touchés.",
+  eraseCancel:"Annuler", eraseOk:"Effacer définitivement",
+  h5:"Points de situation",
+  histCount:n=>n?`${n} enregistré${n>1?"s":""}`:"",
+  histLine:(f,p,t)=>`${f} en place · ${p} en cours sur ${t}`,
+  axeCount:(f,a)=>`${f}/${a}`,
+  prio:"Prioritaire", niv:n=>"Niveau "+n,
+  noteLabel:"Note ou preuve", notePlaceholder:"Décision documentée, indicateur suivi, clause intégrée…",
+  st:{todo:"À faire", prog:"En cours", fait:"En place", na:"Écartée"},
+  noName:"Administration sans nom", prioLabel:"Priorités", none:"aucune",
+  err:"Ce fichier n'est pas un suivi ReUse-CH (.json exporté depuis cet outil).",
+  priv:"Cette page ne dépose aucun cookie, ne charge aucun script tiers et ne collecte aucune donnée. Tout reste sur votre appareil.",
+  slug:"suivi"
+ },
+ de:{
+  locale:"de-CH",
+  title:"Ihr Massnahmenplan",
+  lede:"Richten Sie das ReUse-CH-Rahmenwerk auf Grösse, Ziele und Reifegrad Ihrer Verwaltung aus und verfolgen Sie Ihre Massnahmen über die Zeit.",
+  defLead:"Ein ",
+  defCore:'freiwilliges und flexibles Rahmenwerk für eine <strong>verantwortungsvolle</strong>, <strong>innovative</strong> und <strong>gemeinsam genutzte</strong> digitale Transformation der Schweizer öffentlichen Verwaltungen.',
+  licence:"Veröffentlicht unter CC BY-SA 4.0.",
+  stamp:"ReUse-CH v0.5 · CC BY-SA 4.0 · Lokale Daten, offline",
+  hProfil:"Profil der Verwaltung",
+  lblNom:"Name der Verwaltung (freiwillig)",
+  n1:"Der Name bleibt auf Ihrem Gerät und wird nie übermittelt.",
+  h2:"Art der Verwaltung", n2:"Bestimmt die vorgeschlagene Stufe.",
+  h2b:"Angestrebter Reifegrad", n2b:"Jede Stufe übernimmt die Massnahmen der vorhergehenden. Just enough, just in time, just for the risk.",
+  h3:"Schwerpunkte", n3:"Massnahmen zu den gewählten Säulen rücken in jedem Handlungsfeld an den Anfang. Ausgeblendet wird keine.",
+  profilEmpty:"Noch auszufüllen",
+  hReg:"Die Massnahmen", hData:"Daten und Sicherung",
+  expandAll:"Alle aufklappen", collapseAll:"Alle zuklappen",
+  sum:"Stand der Umsetzung", small:"Massnahmen umgesetzt",
+  detail:(p,t,na)=>`${p} in Arbeit · ${t} offen`+(na?` · ${na} ausgenommen`:""),
+  lblSearch:"Suchen", searchPlaceholder:"Stichwort …",
+  lblFilter:"Filtern",
+  filters:{all:"Alle", todo:"Offen", prog:"In Arbeit", fait:"Umgesetzt", prio:"Vorrangig"},
+  emptyFilter:"Keine Massnahme entspricht diesem Filter.",
+  emptyProfil:"Wählen Sie oben im Profil eine Art der Verwaltung oder eine Stufe, um Ihren Massnahmenplan zusammenzustellen.",
+  storageNote:"Ihre Angaben werden in diesem Browser auf diesem Gerät gespeichert. Exportieren Sie die Datei, um eine Kopie zu behalten, sie weiterzugeben oder anderswo fortzusetzen. Jeder Export trägt eine datierte Standortbestimmung ein: so wird der Fortschritt von Jahr zu Jahr lesbar.",
+  savedAt:d=>"Lokal gespeichert · "+d,
+  noStorage:"Lokale Speicherung in diesem Browser nicht verfügbar: exportieren Sie regelmässig.",
+  export:"Verfolgung exportieren", import:"Verfolgung importieren", print:"Drucken", erase:"Daten löschen",
+  eraseTitle:"Daten löschen?",
+  eraseBody:"Profil, Status, Notizen und Standortbestimmungen in diesem Browser werden endgültig gelöscht. Bereits exportierte Dateien bleiben unberührt.",
+  eraseCancel:"Abbrechen", eraseOk:"Endgültig löschen",
+  h5:"Standortbestimmungen",
+  histCount:n=>n?`${n} erfasst`:"",
+  histLine:(f,p,t)=>`${f} umgesetzt · ${p} in Arbeit von ${t}`,
+  axeCount:(f,a)=>`${f}/${a}`,
+  prio:"Vorrangig", niv:n=>"Stufe "+n,
+  noteLabel:"Notiz oder Nachweis", notePlaceholder:"Dokumentierter Entscheid, verfolgte Kennzahl, vertragliche Klausel …",
+  st:{todo:"Offen", prog:"In Arbeit", fait:"Umgesetzt", na:"Ausgenommen"},
+  noName:"Verwaltung ohne Namen", prioLabel:"Schwerpunkte", none:"keine",
+  err:"Diese Datei ist keine ReUse-CH-Verfolgungsdatei (.json aus diesem Werkzeug).",
+  priv:"Diese Seite setzt keine Cookies, lädt keine Skripte Dritter und erhebt keine Daten. Alles bleibt auf Ihrem Gerät.",
+  slug:"standortbestimmung"
+ }
+};
+
+const AXES = {
+ 1:{fr:"Gouvernance & Conformité",    de:"Governance & Compliance"},
+ 2:{fr:"Capital humain & Culture",    de:"Kompetenzen & Kultur"},
+ 3:{fr:"Société & Durabilité",        de:"Gesellschaft & Nachhaltigkeit"},
+ 4:{fr:"Interopérabilité & Sécurité", de:"Interoperabilität & Sicherheit"},
+ 5:{fr:"Technologie & Solutions",     de:"Technologie & Lösungen"}
+};
+const PILIERS = {
+ soc:{fr:"Sociétal", de:"Gesellschaftlich"},
+ eco:{fr:"Économique", de:"Wirtschaftlich"},
+ env:{fr:"Environnemental", de:"Ökologisch"}
+};
+const TYPES = [
+ {id:"petite", niv:1, fr:{t:"Petite commune",d:"Ressources numériques limitées"}, de:{t:"Kleine Gemeinde",d:"Begrenzte digitale Ressourcen"}},
+ {id:"moyenne",niv:2, fr:{t:"Commune moyenne",d:"Gouvernance numérique en développement"}, de:{t:"Mittlere Gemeinde",d:"Digitale Governance im Aufbau"}},
+ {id:"ville",  niv:3, fr:{t:"Grande ville",d:"Organisation numérique établie"}, de:{t:"Grosse Stadt",d:"Etablierte digitale Organisation"}},
+ {id:"canton", niv:3, fr:{t:"Canton / Confédération",d:"Cadres et dispositifs propres"}, de:{t:"Kanton / Bund",d:"Eigene Rahmenwerke und Vorgaben"}},
+ {id:"inter",  niv:2, fr:{t:"Association intercommunale",d:"Mutualisation entre collectivités"}, de:{t:"Gemeindeverband",d:"Gemeinsame Nutzung zwischen Gemeinwesen"}},
+ {id:"etab",   niv:2, fr:{t:"Établissement (para)public",d:"Mandat public spécifique"}, de:{t:"(Para-)öffentliche Anstalt",d:"Besonderer öffentlicher Auftrag"}}
+];
+const NIVEAUX = {
+ 1:{fr:{t:"Niveau 1 — Démarrer",d:"Éviter les achats isolés, les redondances et les risques majeurs."},
+    de:{t:"Stufe 1 — Starten",d:"Isolierte Beschaffungen, Doppelspurigkeiten und grosse Risiken vermeiden."}},
+ 2:{fr:{t:"Niveau 2 — Structurer",d:"Piloter les projets, maîtriser les coûts, encadrer les prestataires."},
+    de:{t:"Stufe 2 — Strukturieren",d:"Vorhaben steuern, Kosten beherrschen, Anbieter führen."}},
+ 3:{fr:{t:"Niveau 3 — Mutualiser",d:"Contribuer à un bien commun numérique public."},
+    de:{t:"Stufe 3 — Gemeinsam nutzen",d:"Zu einem digitalen Gemeingut beitragen."}}
+};
+
+const ITEMS = [
+{id:"n1-inventaire-apps",n:1,axe:5,p:["eco"],
+ fr:{t:"Inventaire simple des applications",d:"Liste des logiciels et services utilisés, avec leur usage et leur responsable."},
+ de:{t:"Einfaches Anwendungsinventar",d:"Liste der eingesetzten Software und Dienste mit Verwendungszweck und zuständiger Person."}},
+{id:"n1-registre-fournisseurs",n:1,axe:1,p:["eco"],
+ fr:{t:"Registre des fournisseurs et contrats critiques",d:"Contrats numériques essentiels : échéances, coûts récurrents, dépendances."},
+ de:{t:"Verzeichnis der kritischen Anbieter und Verträge",d:"Wesentliche digitale Verträge: Laufzeiten, wiederkehrende Kosten, Abhängigkeiten."}},
+{id:"n1-checklist-projet",n:1,axe:1,p:["eco"],
+ fr:{t:"Checklist ReUse-CH pour tout nouveau projet",d:"Quelques questions systématiques avant de lancer ou d'acheter."},
+ de:{t:"ReUse-CH-Checkliste für jedes neue Vorhaben",d:"Einige feste Fragen, bevor beschafft oder gestartet wird."}},
+{id:"n1-verif-reutilisation",n:1,axe:5,p:["eco","env"],
+ fr:{t:"Vérification de la réutilisation avant acquisition",d:"Une solution existe-t-elle déjà en interne, dans une autre collectivité, en open source ?"},
+ de:{t:"Prüfung der Nachnutzung vor jeder Beschaffung",d:"Besteht bereits intern, bei einem anderen Gemeinwesen oder als Open Source eine Lösung?"}},
+{id:"n1-exigences-securite",n:1,axe:4,p:["soc"],
+ fr:{t:"Exigences minimales de sécurité et de protection des données",d:"Socle appliqué à tout nouvel outil : accès, données personnelles, sauvegardes."},
+ de:{t:"Mindestanforderungen an Informationssicherheit und Datenschutz",d:"Grundlage für jedes neue Werkzeug: Zugriffe, Personendaten, Sicherungen."}},
+{id:"n1-exigences-fournisseurs",n:1,axe:1,p:["eco","soc"],
+ fr:{t:"Exigences minimales applicables aux fournisseurs",d:"Documentation, sécurité, portabilité des données, réversibilité."},
+ de:{t:"Mindestanforderungen an Anbieter",d:"Dokumentation, Sicherheit, Datenportabilität, Reversibilität."}},
+{id:"n1-validation-outils",n:1,axe:1,p:["soc"],
+ fr:{t:"Validation des nouveaux outils par une personne responsable",d:"Aucun outil numérique introduit sans validation identifiée."},
+ de:{t:"Freigabe neuer digitaler Werkzeuge durch eine zuständige Person",d:"Kein digitales Werkzeug wird ohne benannte Freigabe eingeführt."}},
+{id:"n1-systemes-critiques",n:1,axe:4,p:["soc"],
+ fr:{t:"Identification des données et systèmes critiques",d:"Savoir ce qui doit absolument être protégé et continuer de fonctionner."},
+ de:{t:"Kritische Daten und Systeme bestimmen",d:"Wissen, was zwingend geschützt und verfügbar bleiben muss."}},
+{id:"n1-reversibilite-contrats",n:1,axe:1,p:["eco"],
+ fr:{t:"Réversibilité intégrée dans les contrats importants",d:"Conditions de sortie, de migration et de récupération des données prévues dès la signature."},
+ de:{t:"Reversibilität in wesentlichen Verträgen verankern",d:"Ausstieg, Migration und Rückgabe der Daten bereits bei Vertragsabschluss regeln."}},
+{id:"n1-alternative",n:1,axe:3,p:["soc"],
+ fr:{t:"Alternative non numérique pour les prestations essentielles",d:"Guichet, téléphone ou papier maintenus pour les publics éloignés du numérique."},
+ de:{t:"Nicht digitale Alternative für wesentliche Leistungen",d:"Schalter, Telefon oder Papier bleiben für digital ferne Personen erhalten."}},
+{id:"n1-sensibilisation",n:1,axe:2,p:["soc"],
+ fr:{t:"Sensibilisation de base de l'équipe",d:"Sécurité, protection des données et bons réflexes numériques pour tout le personnel."},
+ de:{t:"Grundsensibilisierung der Mitarbeitenden",d:"Sicherheit, Datenschutz und digitale Sorgfalt für das gesamte Personal."}},
+
+{id:"n2-portefeuille",n:2,axe:1,p:["eco"],
+ fr:{t:"Portefeuille de projets numériques",d:"Vue d'ensemble des projets en cours et à venir, priorisés."},
+ de:{t:"Portfolio der digitalen Vorhaben",d:"Gesamtsicht über laufende und geplante Vorhaben, nach Priorität geordnet."}},
+{id:"n2-grille-arbitrage",n:2,axe:1,p:["eco","env"],
+ fr:{t:"Grille d'arbitrage valeur / coût / risque / durabilité",d:"Critères communs pour décider de lancer, reporter ou arrêter un projet."},
+ de:{t:"Entscheidungsraster Nutzen / Kosten / Risiko / Nachhaltigkeit",d:"Gemeinsame Kriterien, um ein Vorhaben zu starten, zu verschieben oder zu beenden."}},
+{id:"n2-catalogue-solutions",n:2,axe:5,p:["eco"],
+ fr:{t:"Catalogue des solutions réutilisables",d:"Solutions internes ou d'autres collectivités mobilisables avant tout achat."},
+ de:{t:"Katalog nachnutzbarer Lösungen",d:"Eigene Lösungen und solche anderer Verwaltungen, die vor jeder Beschaffung geprüft werden."}},
+{id:"n2-gouvernance-securite",n:2,axe:4,p:["soc"],
+ fr:{t:"Gouvernance sécurité",d:"Rôles, processus et suivi réguliers de la sécurité de l'information."},
+ de:{t:"Führung der Informationssicherheit",d:"Rollen, Prozesse und regelmässige Überprüfung der Informationssicherheit."}},
+{id:"n2-achat-responsable",n:2,axe:1,p:["eco","env"],
+ fr:{t:"Politique d'achat numérique responsable",d:"Critères de réutilisation, cycle de vie, accessibilité et sobriété dans les appels d'offres."},
+ de:{t:"Politik der verantwortungsvollen digitalen Beschaffung",d:"Nachnutzung, Lebenszyklus, Barrierefreiheit und Ressourcenschonung als Zuschlagskriterien."}},
+{id:"n2-referentiel-fournisseurs",n:2,axe:1,p:["eco"],
+ fr:{t:"Référentiel d'exigences fournisseurs",d:"Exigences standardisées : documentation, interopérabilité, sécurité, réversibilité."},
+ de:{t:"Anforderungskatalog für Anbieter",d:"Einheitliche Anforderungen: Dokumentation, Interoperabilität, Sicherheit, Reversibilität."}},
+{id:"n2-satisfaction",n:2,axe:3,p:["soc"],
+ fr:{t:"Indicateurs de satisfaction utilisateur",d:"Quelques mesures simples de l'expérience des usagers et du personnel."},
+ de:{t:"Kennzahlen zur Zufriedenheit der Nutzenden",d:"Wenige einfache Messgrössen zur Erfahrung von Bevölkerung und Mitarbeitenden."}},
+{id:"n2-couts-recurrents",n:2,axe:1,p:["eco"],
+ fr:{t:"Suivi des coûts récurrents",d:"Licences, abonnements, maintenance : visibilité sur les coûts complets."},
+ de:{t:"Verfolgung der wiederkehrenden Kosten",d:"Lizenzen, Abonnemente, Wartung: Transparenz über die Gesamtkosten."}},
+{id:"n2-gestion-changements",n:2,axe:1,p:["eco"],
+ fr:{t:"Gestion des changements (y compris prestataires)",d:"Les modifications, même réalisées par un fournisseur, sont validées et tracées."},
+ de:{t:"Änderungsmanagement, auch für Anbieter",d:"Auch von Anbietern ausgeführte Änderungen werden freigegeben und nachvollziehbar dokumentiert."}},
+{id:"n2-gestion-donnees",n:2,axe:4,p:["soc"],
+ fr:{t:"Gestion des données",d:"Registre des données, qualité, responsabilités et flux principaux documentés."},
+ de:{t:"Datenbewirtschaftung",d:"Datenverzeichnis, Datenqualität, Zuständigkeiten und wesentliche Datenflüsse dokumentiert."}},
+{id:"n2-formation",n:2,axe:2,p:["soc"],
+ fr:{t:"Plan de formation numérique responsable",d:"Montée en compétences planifiée, y compris la capacité à piloter les prestataires."},
+ de:{t:"Weiterbildungsplan für verantwortungsvolle Digitalisierung",d:"Geplanter Kompetenzaufbau, einschliesslich der Steuerung von Anbietern."}},
+{id:"n2-accessibilite",n:2,axe:3,p:["soc"],
+ fr:{t:"Grille d'accessibilité et tests utilisateurs",d:"Prestations les plus utilisées vérifiées (WCAG / eCH-0059) et testées avec des usagers."},
+ de:{t:"Raster zur Barrierefreiheit und Tests mit Nutzenden",d:"Meistgenutzte Leistungen nach WCAG / eCH-0059 geprüft und mit Nutzenden getestet."}},
+{id:"n2-guide-ia",n:2,axe:2,p:["soc"],
+ fr:{t:"Guide d'usage de l'IA et des outils numériques",d:"Règles claires pour un usage proportionné, transparent et supervisé de l'IA."},
+ de:{t:"Leitfaden zum Einsatz von KI und digitalen Werkzeugen",d:"Klare Regeln für einen verhältnismässigen, transparenten und überwachten KI-Einsatz."}},
+
+{id:"n3-architecture",n:3,axe:5,p:["eco"],
+ fr:{t:"Architecture cible",d:"Vision technique partagée orientant les choix et les remplacements."},
+ de:{t:"Zielarchitektur",d:"Gemeinsames technisches Zielbild als Grundlage für Entscheide und Ablösungen."}},
+{id:"n3-catalogue-api",n:3,axe:5,p:["eco"],
+ fr:{t:"Catalogue d'API et de données",d:"Interfaces et jeux de données documentés, sobres et réutilisables."},
+ de:{t:"Katalog der Schnittstellen und Daten",d:"Dokumentierte, sparsame und nachnutzbare Schnittstellen und Datensätze."}},
+{id:"n3-open",n:3,axe:3,p:["soc","eco"],
+ fr:{t:"Publication open data / open source",d:"Données publiques non sensibles et composants ouverts, lorsque pertinent."},
+ de:{t:"Veröffentlichung als Open Data / Open Source",d:"Nicht sensible öffentliche Daten und offene Komponenten, wo sinnvoll."}},
+{id:"n3-finops-greenit",n:3,axe:1,p:["eco","env"],
+ fr:{t:"Tableaux de bord FinOps et Green IT",d:"Coûts cloud et empreinte environnementale suivis et pilotés."},
+ de:{t:"Cockpits für FinOps und Green IT",d:"Cloud-Kosten und Umweltwirkung werden gemessen und gesteuert."}},
+{id:"n3-devsecops",n:3,axe:5,p:["soc"],
+ fr:{t:"Démarche DevSecOps",d:"Sécurité et qualité intégrées en continu dans la chaîne de livraison."},
+ de:{t:"DevSecOps-Vorgehen",d:"Sicherheit und Qualität sind durchgehend in die Lieferkette eingebaut."}},
+{id:"n3-cooperation",n:3,axe:2,p:["eco"],
+ fr:{t:"Coopération interadministrative",d:"Projets, plateformes et communautés de pratique menés avec d'autres collectivités."},
+ de:{t:"Zusammenarbeit zwischen Verwaltungen",d:"Gemeinsame Vorhaben, Plattformen und Fachgemeinschaften mit anderen Gemeinwesen."}},
+{id:"n3-partage-rex",n:3,axe:2,p:["eco"],
+ fr:{t:"Partage de cahiers des charges, modèles et retours d'expérience",d:"Ce qui a servi ici peut servir ailleurs : publier et diffuser."},
+ de:{t:"Pflichtenhefte, Vorlagen und Erfahrungsberichte teilen",d:"Was hier genützt hat, nützt andernorts: veröffentlichen und weitergeben."}},
+{id:"n3-standards-communs",n:3,axe:5,p:["eco"],
+ fr:{t:"Contribution à des plateformes ou standards communs",d:"Participation active aux standards eCH, plateformes mutualisées et biens communs."},
+ de:{t:"Beitrag an gemeinsame Plattformen und Standards",d:"Aktive Mitwirkung bei eCH-Standards, gemeinsamen Plattformen und digitalen Gemeingütern."}},
+{id:"n3-mutualisation-fournisseurs",n:3,axe:1,p:["eco"],
+ fr:{t:"Mutualisation des exigences fournisseurs",d:"Exigences coordonnées entre collectivités clientes des mêmes prestataires."},
+ de:{t:"Gebündelte Anforderungen an Anbieter",d:"Abgestimmte Anforderungen von Verwaltungen mit denselben Anbietern."}}
+];
+
+
+// La définition du cadre n'est écrite qu'une fois. L'en-tête et le pied de page
+// en sont dérivés : aucune variante ne peut diverger de l'autre.
+const REPO = "https://github.com/barthelemyr/ReUse_IT";
+["fr","de"].forEach(l=>{
+  const u = UI[l];
+  u.def  = u.defLead + u.defCore;
+  u.foot = `<a href="${REPO}">ReUse-CH</a> — ${u.defCore} ${u.licence}`;
+});
+
+const ST = ["todo","prog","fait","na"];
+const FILTERS = ["all","todo","prog","fait","prio"];
+
+/* ===================== ÉTAT ===================== */
+const KEY = "reuse-ch/v1";
+let lang = (navigator.language||"fr").toLowerCase().startsWith("de") ? "de" : "fr";
+let state = {profil:{nom:"",type:"",niveau:0,piliers:["soc","eco","env"]}, items:{}, historique:[]};
+let ui = {filter:"all", search:"", open:{}, panels:{profil:true, data:false, hist:false}};
+let storageOk = true, savedAt = null, saveTimer = null;
+
+const $ = id => document.getElementById(id);
+const T = () => UI[lang];
+const esc = s => String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const fmtDate = iso => new Date(iso).toLocaleDateString(T().locale,{day:"2-digit",month:"2-digit",year:"numeric"});
+const fmtStamp = iso => new Date(iso).toLocaleString(T().locale,{day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit"});
+const active = () => ITEMS.filter(i=>i.n<=state.profil.niveau);
+function st(id){ if(!state.items[id]) state.items[id]={st:"todo",note:""}; return state.items[id]; }
+const prio = i => i.p.some(p=>state.profil.piliers.includes(p));
+function tot(list){
+  let f=0,p=0,n=0;
+  list.forEach(i=>{const s=st(i.id).st; if(s==="fait")f++; else if(s==="prog")p++; else if(s==="na")n++;});
+  return {fait:f,prog:p,na:n,app:list.length-n};
+}
+const byAxe = (a,list) => list.filter(i=>i.axe===a).sort((x,y)=>(prio(y)-prio(x))||(x.n-y.n));
+
+function matches(i){
+  const f = ui.filter;
+  if(f==="prio" && !prio(i)) return false;
+  if(f!=="all" && f!=="prio" && st(i.id).st!==f) return false;
+  const q = ui.search.trim().toLowerCase();
+  if(q && !(i[lang].t+" "+i[lang].d+" "+(st(i.id).note||"")).toLowerCase().includes(q)) return false;
+  return true;
+}
+
+function barHTML(c){
+  const a = c.app || 1;
+  return `<div class="progress" role="progressbar" aria-valuenow="${c.fait}" aria-valuemin="0" aria-valuemax="${c.app}" style="width:${Math.round(100*c.fait/a)}%"><div class="progress-bar bg-primary"></div></div>`
+       + `<div class="progress" aria-hidden="true" style="width:${Math.round(100*c.prog/a)}%"><div class="progress-bar bg-warning"></div></div>`;
+}
+
+/* ===================== PERSISTANCE LOCALE ===================== */
+function save(now){
+  clearTimeout(saveTimer);
+  const write = () => {
+    try{
+      localStorage.setItem(KEY, JSON.stringify({v:1, lang, profil:state.profil, items:state.items, historique:state.historique, ui}));
+      savedAt = new Date().toISOString(); storageOk = true;
+    }catch(e){ storageOk = false; }
+    drawSaved();
+  };
+  now ? write() : (saveTimer = setTimeout(write, 400));
+}
+function load(){
+  try{
+    const raw = localStorage.getItem(KEY);
+    if(!raw) return false;
+    const d = JSON.parse(raw);
+    if(d.lang==="fr"||d.lang==="de") lang = d.lang;
+    if(d.profil) state.profil = Object.assign(state.profil, d.profil);
+    if(d.items) state.items = d.items;
+    if(Array.isArray(d.historique)) state.historique = d.historique;
+    if(d.ui) ui = Object.assign(ui, d.ui, {panels:Object.assign(ui.panels, d.ui.panels||{})});
+    savedAt = new Date().toISOString();
+    return true;
+  }catch(e){ storageOk = false; return false; }
+}
+function drawSaved(){
+  const el = $("r-saved");
+  if(!storageOk){ el.textContent = T().noStorage; el.classList.remove("is-on"); return; }
+  el.textContent = savedAt ? T().savedAt(fmtStamp(savedAt)) : "";
+  el.classList.toggle("is-on", !!savedAt);
+}
+
+/* ===================== PROFIL ===================== */
+function drawProfil(){
+  const t = T();
+  $("f-nom").placeholder = t.lblNom;
+
+  $("f-types").innerHTML = TYPES.map(x=>`
+    <label class="list-group-item d-flex gap-2 align-items-start">
+      <input class="form-check-input flex-shrink-0 mt-1" type="radio" name="ty" value="${x.id}" ${state.profil.type===x.id?"checked":""}>
+      <span><span class="fw-semibold d-block">${esc(x[lang].t)}</span><span class="small text-secondary">${esc(x[lang].d)}</span></span>
+    </label>`).join("");
+  $("f-types").querySelectorAll("input").forEach(i=>i.addEventListener("change",()=>{
+    state.profil.type=i.value;
+    const x=TYPES.find(y=>y.id===i.value); if(x) state.profil.niveau=x.niv;
+    drawProfil(); drawAll(); save();
+  }));
+
+  $("f-niveaux").innerHTML = [1,2,3].map(n=>`
+    <label class="list-group-item d-flex gap-2 align-items-start">
+      <input class="form-check-input flex-shrink-0 mt-1" type="radio" name="nv" value="${n}" ${state.profil.niveau===n?"checked":""}>
+      <span><span class="fw-semibold d-block">${esc(NIVEAUX[n][lang].t)}</span><span class="small text-secondary">${esc(NIVEAUX[n][lang].d)}</span></span>
+    </label>`).join("");
+  $("f-niveaux").querySelectorAll("input").forEach(i=>i.addEventListener("change",()=>{
+    state.profil.niveau=parseInt(i.value,10); drawProfil(); drawAll(); save();
+  }));
+
+  $("f-piliers").innerHTML = Object.entries(PILIERS).map(([k,v])=>`
+    <div class="form-check form-check-inline">
+      <input class="form-check-input" type="checkbox" id="p-${k}" value="${k}" ${state.profil.piliers.includes(k)?"checked":""}>
+      <label class="form-check-label" for="p-${k}">${esc(v[lang])}</label>
+    </div>`).join("");
+  $("f-piliers").querySelectorAll("input").forEach(i=>i.addEventListener("change",()=>{
+    if(i.checked){ if(!state.profil.piliers.includes(i.value)) state.profil.piliers.push(i.value); }
+    else state.profil.piliers = state.profil.piliers.filter(p=>p!==i.value);
+    drawProfil(); drawAll(); save();
+  }));
+
+  const ty = TYPES.find(x=>x.id===state.profil.type);
+  $("r-meta").textContent = state.profil.niveau
+    ? [state.profil.nom || null, ty?ty[lang].t:null, NIVEAUX[state.profil.niveau][lang].t].filter(Boolean).join(" · ")
+    : t.profilEmpty;
+}
+
+/* ===================== PLAN D'ACTION ===================== */
+function drawReg(){
+  const t = T(), list = active();
+
+  if(!list.length){
+    $("r-groups").innerHTML = "";
+    $("r-empty").textContent = t.emptyProfil; $("r-empty").hidden = false;
+    return;
+  }
+
+  let shown = 0;
+  $("r-groups").innerHTML = Object.keys(AXES).map(a=>{
+    const sub = byAxe(+a, list), vis = sub.filter(matches);
+    if(!vis.length) return "";
+    shown += vis.length;
+    const cc = tot(sub), isOpen = ui.open[a] !== false;
+    return `<details class="panel axis" data-axe="${a}" id="ax-${a}" ${isOpen?"open":""}>
+      <summary>
+        <span class="axis-no">0${a}</span>
+        <span class="axis-name">${esc(AXES[a][lang])}</span>
+        <span class="axis-count num" data-count="${a}">${t.axeCount(cc.fait,cc.app)}</span>
+        <span class="progress-stacked axis-bar" data-bar="${a}">${barHTML(cc)}</span>
+      </summary>
+      <div class="panel-body"><div class="list-group list-group-flush">${vis.map(rowHTML).join("")}</div></div>
+    </details>`;
+  }).join("");
+
+  $("r-empty").textContent = t.emptyFilter;
+  $("r-empty").hidden = shown > 0;
+
+  $("r-groups").querySelectorAll("details.axis").forEach(d=>d.addEventListener("toggle",()=>{
+    ui.open[d.dataset.axe] = d.open; save();
+  }));
+  $("r-groups").querySelectorAll("select[data-set]").forEach(sel=>sel.addEventListener("change",()=>setStatus(sel.dataset.set, sel.value)));
+  $("r-groups").querySelectorAll("textarea[data-nt]").forEach(a=>a.addEventListener("input",()=>{
+    st(a.dataset.nt).note = a.value;
+    a.closest("details.note").classList.toggle("has-note", !!a.value.trim());
+    save();
+  }));
+}
+
+function rowHTML(i){
+  const t=T(), s=st(i.id);
+  return `<div class="list-group-item ${s.st==="na"?"is-na":""}" id="r-${i.id}">
+   <div class="prac">
+    <span class="dot dot-${s.st}" data-dot="${i.id}"></span>
+    <div class="prac-body">
+      <div class="d-flex justify-content-between align-items-start gap-3 flex-wrap">
+        <span class="fw-semibold practice-title" style="flex:1 1 12rem">${esc(i[lang].t)}</span>
+        <select class="form-select form-select-sm d-print-none" data-set="${i.id}" style="width:auto;min-width:9rem" aria-label="${esc(i[lang].t)}">
+          ${ST.map(v=>`<option value="${v}" ${s.st===v?"selected":""}>${esc(t.st[v])}</option>`).join("")}
+        </select>
+        <span class="d-none d-print-inline small">${esc(t.st[s.st])}</span>
+      </div>
+      <div class="small text-secondary mt-1">${esc(i[lang].d)}</div>
+      <div class="mt-2">
+        <span class="badge text-bg-light text-secondary fw-normal">${esc(t.niv(i.n))}</span>
+        ${prio(i)?`<span class="badge text-bg-light badge-prio fw-normal">${esc(t.prio)}</span>`:""}
+      </div>
+      <details class="note mt-2 ${s.note.trim()?"has-note":""}">
+      <summary>${esc(t.noteLabel)}</summary>
+      <textarea class="form-control form-control-sm mt-2 d-print-none" rows="2" data-nt="${i.id}" placeholder="${esc(t.notePlaceholder)}">${esc(s.note)}</textarea>
+        <div class="d-none d-print-block small border-start ps-2 mt-2">${esc(s.note)}</div>
+      </details>
+    </div>
+   </div>
+  </div>`;
+}
+
+// Changement de statut : mise à jour ciblée, sans reconstruire la page.
+// Les panneaux ouverts, le défilement et le focus sont préservés.
+function setStatus(id, value){
+  st(id).st = value;
+  const row = $("r-"+id);
+  if(row){
+    row.classList.toggle("is-na", value==="na");
+    const dot = row.querySelector("[data-dot]");
+    dot.className = "dot dot-"+value;
+  }
+  const list = active();
+  Object.keys(AXES).forEach(a=>{
+    const cc = tot(byAxe(+a, list));
+    const ct = document.querySelector(`[data-count="${a}"]`);
+    const bar = document.querySelector(`[data-bar="${a}"]`);
+    if(ct) ct.textContent = T().axeCount(cc.fait, cc.app);
+    if(bar) bar.innerHTML = barHTML(cc);
+  });
+  drawSummary();
+  save(true);
+}
+
+function drawSummary(){
+  const t = T(), c = tot(active());
+  $("r-big").innerHTML = `${c.fait}<span class="of"> / ${c.app}</span>`;
+  $("r-small").textContent = t.small;
+  $("r-bar").innerHTML = barHTML(c);
+  $("r-detail").textContent = t.detail(c.prog, c.app-c.fait-c.prog, c.na);
+  $("tb-count").textContent = `${c.fait} / ${c.app}`;
+  $("tb-bar").innerHTML = barHTML(c);
+  $("r-keys").innerHTML = ST.map(s=>`<span class="d-inline-flex align-items-center gap-1"><span class="dot dot-${s}"></span>${esc(t.st[s])}</span>`).join("");
+}
+
+// Le panneau n'existe qu'à partir du premier point de situation :
+// une section vide n'apprend rien et occupe la page pour rien.
+function drawHist(){
+  const t=T(), h=state.historique;
+  $("pnl-hist").hidden = h.length===0;
+  if(!h.length){ $("r-hist").innerHTML=""; $("r-histcount").textContent=""; return; }
+  $("r-histcount").textContent = t.histCount(h.length);
+  $("r-hist").innerHTML = `<ul class="list-group list-group-flush">${h.slice().reverse().map(s=>
+      `<li class="list-group-item d-flex justify-content-between gap-2 px-0 small">
+        <span>${esc(t.histLine(s.fait,s.prog,s.total))}</span>
+        <time class="text-secondary text-nowrap num" datetime="${s.date}">${fmtDate(s.date)}</time></li>`).join("")}</ul>`;
+}
+
+function drawFilters(){
+  const t = T();
+  $("f-search").placeholder = t.searchPlaceholder;
+  $("f-filter").innerHTML = FILTERS.map(f=>`
+    <input type="radio" class="btn-check" name="flt" id="flt-${f}" value="${f}" ${ui.filter===f?"checked":""}>
+    <label class="btn btn-sm btn-outline-secondary" for="flt-${f}">${esc(t.filters[f])}</label>`).join("");
+  $("f-filter").querySelectorAll("input").forEach(i=>i.addEventListener("change",()=>{
+    ui.filter = i.value; drawReg(); save();
+  }));
+}
+
+function drawAll(){ drawSummary(); drawReg(); drawHist(); }
+
+/* ===================== EXPORT / IMPORT / EFFACEMENT ===================== */
+function doExport(){
+  const c = tot(active());
+  const first = state.historique.length===0;
+  state.historique.push({date:new Date().toISOString(), fait:c.fait, prog:c.prog, total:c.app});
+  drawHist();
+  if(first){ $("pnl-hist").open = true; ui.panels.hist = true; }
+  save(true);
+  const data = {format:"reuse-ch-suivi", version:3, lang, exportedAt:new Date().toISOString(),
+    profil:state.profil, items:state.items, historique:state.historique};
+  const slug = (state.profil.nom||"admin").toLowerCase().normalize("NFD")
+    .replace(/[\u0300-\u036f]/g,"").replace(/ä/g,"ae").replace(/ö/g,"oe").replace(/ü/g,"ue")
+    .replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")||"admin";
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:"application/json"}));
+  a.download = `reuse-ch_${T().slug}_${slug}_${new Date().toISOString().slice(0,10)}.json`;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(a.href),5000);
+}
+
+function doImport(file){
+  const r = new FileReader();
+  r.onload = () => {
+    try{
+      const d = JSON.parse(r.result);
+      if(d.format!=="reuse-ch-suivi" && d.format!=="reuse-it-suivi") throw new Error("format");
+      state = {profil:Object.assign({nom:"",type:"",niveau:1,piliers:["soc","eco","env"]}, d.profil),
+        items:d.items||{}, historique:Array.isArray(d.historique)?d.historique:[]};
+      if(![1,2,3].includes(state.profil.niveau)) state.profil.niveau = 1;
+      if(d.lang==="de"||d.lang==="fr") lang = d.lang;
+      $("f-nom").value = state.profil.nom||"";
+      $("pnl-profil").open = false;
+      applyLang(); save(true);
+    }catch(e){ alert(T().err); }
+  };
+  r.readAsText(file);
+}
+
+function doErase(){
+  try{ localStorage.removeItem(KEY); }catch(e){}
+  state = {profil:{nom:"",type:"",niveau:0,piliers:["soc","eco","env"]}, items:{}, historique:[]};
+  ui = {filter:"all", search:"", open:{}, panels:{profil:true, data:false, hist:false}};
+  savedAt = null;
+  $("f-nom").value = ""; $("f-search").value = "";
+  $("pnl-profil").open = true; $("pnl-data").open = false; $("pnl-hist").open = false;
+  applyLang();
+}
+
+/* ===================== LANGUE ===================== */
+function applyLang(){
+  const t = T();
+  document.documentElement.lang = lang;
+  document.title = "ReUse-CH — " + t.title;
+  const set = (id,v) => { $(id).textContent = v; };
+  set("x-title",t.title); set("x-lede",t.lede); set("x-stamp",t.stamp);
+  set("x-h-profil",t.hProfil); set("x-lbl-nom",t.lblNom); set("x-n1",t.n1);
+  set("x-h2",t.h2); set("x-n2",t.n2); set("x-h2b",t.h2b); set("x-n2b",t.n2b);
+  set("x-h3",t.h3); set("x-n3",t.n3);
+  set("x-h-reg",t.hReg); set("x-h-data",t.hData); set("x-h5",t.h5); set("x-sum",t.sum);
+  $("f-search").setAttribute("aria-label", t.lblSearch);
+  $("f-filter").setAttribute("aria-label", t.lblFilter);
+  set("x-storage-note",t.storageNote);
+  set("b-exp",t.export); set("b-imp",t.import); set("b-print",t.print); set("b-erase",t.erase);
+  set("dlg-title",t.eraseTitle); set("dlg-body",t.eraseBody);
+  set("dlg-cancel",t.eraseCancel); set("dlg-ok",t.eraseOk);
+  $("x-def").innerHTML = t.def;
+  $("x-foot").innerHTML = t.foot; $("x-priv").textContent = t.priv;
+  document.querySelectorAll("[data-lang]").forEach(b=>b.classList.toggle("active", b.dataset.lang===lang));
+  drawFilters(); drawProfil(); drawAll(); drawSaved(); drawToggle();
+}
+
+function drawToggle(){
+  const anyClosed = Object.keys(AXES).some(a=>ui.open[a]===false);
+  $("b-toggle").textContent = anyClosed ? T().expandAll : T().collapseAll;
+}
+
+/* ===================== LIAISONS ===================== */
+document.querySelectorAll("[data-lang]").forEach(b=>b.addEventListener("click",()=>{ lang=b.dataset.lang; applyLang(); save(true); }));
+$("f-nom").addEventListener("input",()=>{ state.profil.nom=$("f-nom").value.trim(); drawProfil(); save(); });
+$("f-search").addEventListener("input",()=>{ ui.search=$("f-search").value; drawReg(); save(); });
+$("b-toggle").addEventListener("click",()=>{
+  const expand = Object.keys(AXES).some(a=>ui.open[a]===false);
+  Object.keys(AXES).forEach(a=>ui.open[a]=expand);
+  document.querySelectorAll("details.axis").forEach(d=>d.open=expand);
+  drawToggle(); save();
+});
+["profil","data","hist"].forEach(k=>{
+  const el = $("pnl-"+k);
+  el.addEventListener("toggle",()=>{ ui.panels[k]=el.open; drawToggle(); save(); });
+});
+$("b-exp").addEventListener("click",doExport);
+$("b-print").addEventListener("click",()=>window.print());
+$("b-imp").addEventListener("click",()=>$("f-file").click());
+$("f-file").addEventListener("change",e=>{ if(e.target.files[0]) doImport(e.target.files[0]); e.target.value=""; });
+$("b-erase").addEventListener("click",()=>$("dlg-erase").showModal());
+$("dlg-erase").addEventListener("close",()=>{ if($("dlg-erase").returnValue==="ok") doErase(); });
+
+// Écriture forcée quand la page passe en arrière-plan ou se ferme :
+// une note saisie puis l'onglet fermé aussitôt ne doit pas être perdue.
+addEventListener("visibilitychange",()=>{ if(document.visibilityState==="hidden") save(true); });
+addEventListener("pagehide",()=>save(true));
+
+// À l'impression, tout est déplié ; l'état est rendu ensuite.
+let printOpened = [];
+addEventListener("beforeprint",()=>{
+  printOpened = [...document.querySelectorAll("details")].filter(d=>!d.open);
+  printOpened.forEach(d=>d.open=true);
+});
+addEventListener("afterprint",()=>{ printOpened.forEach(d=>d.open=false); printOpened=[]; });
+
+/* ===================== DÉMARRAGE ===================== */
+const had = load();
+$("f-nom").value = state.profil.nom || "";
+$("f-search").value = ui.search || "";
+$("pnl-profil").open = had ? !!ui.panels.profil && !state.profil.niveau : true;
+$("pnl-data").open  = !!ui.panels.data;
+$("pnl-hist").open  = !!ui.panels.hist;
+applyLang();
+</script>
+</body>
+</html>
