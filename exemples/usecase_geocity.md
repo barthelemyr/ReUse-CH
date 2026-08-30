@@ -2,7 +2,7 @@
 
 ## Contexte
 
-En 2019, la Ville d’Yverdon-les-Bains a pris une décision pionnière: développer sa plateforme numérique Geocity en open source. L’objectif n’était pas seulement de simplifier les démarches administratives, mais aussi de garantir la souveraineté numérique de la collectivité et de partager les bénéfices avec d’autres communes. Plutôt que de recourir à une solution propriétaire, la Municipalité a choisi d’investir dans un outil libre, transparent et réutilisable.
+En 2019, la Ville d’Yverdon-les-Bains a pris une décision pionnière : développer sa plateforme numérique Geocity en open source. L’objectif n’était pas seulement de simplifier les démarches administratives, mais aussi de garantir la souveraineté numérique de la collectivité et de partager les bénéfices avec d’autres communes. Plutôt que de recourir à une solution propriétaire, la Municipalité a choisi d’investir dans un outil libre, transparent et réutilisable.
 
 ## Exemple concret
 
@@ -22,9 +22,9 @@ Résultat : un processus fluide, transparent et traçable, qui réduit les écha
 ## Pertinence en matière de numérique responsable
 1. **Open source comme choix fondateur**
    La Ville d’Yverdon a voulu, dès le départ, que Geocity soit développé avec des logiciels libres (Django/Python, PostgreSQL/PostGIS, Vue.js) et que son code soit publié sous licence AGPLv3. Cette approche garantit :
-   une indépendance vis-à-vis de fournisseurs fermés
-   une transparence totale pour les citoyens et les partenaires
-   la possibilité pour d’autres communes de réutiliser et améliorer l’outil
+   - une indépendance vis-à-vis de fournisseurs fermés ;
+   - une transparence totale pour les citoyens et les partenaires ;
+   - la possibilité pour d’autres communes de réutiliser et d’améliorer l’outil.
 2. **Mutualisation entre collectivités**
    En publiant le code et en invitant d’autres communes à rejoindre le projet, Yverdon a favorisé une dynamique collaborative. Aujourd’hui, plusieurs villes romandes partagent les coûts et enrichissent ensemble Geocity. Chaque amélioration profite à tous, ce qui optimise l’usage des ressources publiques.
 3. **Hébergement local et durable**

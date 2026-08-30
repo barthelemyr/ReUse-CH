@@ -1,0 +1,326 @@
+// =====================================================================
+// ReUse-CH — habillage Bootstrap 5.3
+// Build sur mesure : seuls les composants utilisés sont compilés.
+// Typographie d'inspiration suisse : grotesque néo-classique, angles vifs,
+// filets capillaires, chiffres tabulaires.
+// Compiler :  npx sass --no-charset --style=compressed
+// =====================================================================
+
+// ---------------------------------------------------------------- Encre
+$primary:      #1a6b3a;   // vert de travail : structure et avancement
+// Rouge suisse, employé avec parcimonie : marque, filet de tête, priorités,
+// actions destructives. #da291c (Pantone 485) assombri pour tenir l'AA.
+$ch-red:       #c8102e;
+$ch-red-light: #ef6a62;
+$danger:       $ch-red;
+$success:      #1a6b3a;
+$warning:      #a56a00;
+$body-color:   #121416;
+$body-bg:      #ffffff;
+$secondary:    #6b706d;
+$border-color: #dee0dc;
+
+// ----------------------------------------------------------- Caractère
+$font-family-sans-serif: "Helvetica Neue", Helvetica, Arial, "Liberation Sans", "Nimbus Sans", system-ui, sans-serif;
+$font-size-base:       1rem;
+$line-height-base:     1.45;
+$headings-font-weight: 600;
+$headings-line-height: 1.15;
+$small-font-size:      .8125rem;
+
+// ----------------------------------------------------------- Géométrie
+$enable-rounded:   false;
+$enable-shadows:   false;
+$enable-gradients: false;
+
+$border-width:            1px;
+$card-border-color:       $border-color;
+$list-group-border-color: $border-color;
+$input-border-color:      #c9ccc7;
+
+$focus-ring-width:   2px;
+$focus-ring-opacity: 1;
+$focus-ring-color:   $primary;
+$focus-ring-blur:    0;
+$input-btn-focus-box-shadow:        none;
+$input-focus-box-shadow:            none;
+$btn-focus-box-shadow:              none;
+$form-check-input-focus-box-shadow: none;
+
+$progress-height:   .3125rem;
+$progress-bg:       #eceeea;
+$badge-font-weight: 500;
+$badge-padding-y:   .3em;
+$badge-padding-x:   .5em;
+
+// ------------------------------------------------------------ Bootstrap
+@import "../node_modules/bootstrap/scss/functions";
+@import "../node_modules/bootstrap/scss/variables";
+@import "../node_modules/bootstrap/scss/variables-dark";
+@import "../node_modules/bootstrap/scss/maps";
+@import "../node_modules/bootstrap/scss/mixins";
+@import "../node_modules/bootstrap/scss/utilities";
+
+$utilities: map-get-multiple($utilities, (
+  "display", "flex", "flex-direction", "flex-wrap", "justify-content",
+  "align-items", "align-self", "gap", "order",
+  "margin", "margin-x", "margin-y", "margin-top", "margin-end", "margin-bottom", "margin-start",
+  "padding", "padding-x", "padding-y", "padding-top", "padding-end", "padding-bottom", "padding-start",
+  "font-size", "font-weight", "line-height", "text-align", "color", "background-color",
+  "border", "border-top", "border-end", "border-bottom", "border-start", "border-color",
+  "width", "max-width", "overflow", "position", "visibility", "user-select", "opacity"
+));
+
+@import "../node_modules/bootstrap/scss/root";
+@import "../node_modules/bootstrap/scss/reboot";
+@import "../node_modules/bootstrap/scss/type";
+@import "../node_modules/bootstrap/scss/containers";
+@import "../node_modules/bootstrap/scss/grid";
+@import "../node_modules/bootstrap/scss/forms";
+@import "../node_modules/bootstrap/scss/buttons";
+@import "../node_modules/bootstrap/scss/transitions";
+@import "../node_modules/bootstrap/scss/nav";
+@import "../node_modules/bootstrap/scss/navbar";
+@import "../node_modules/bootstrap/scss/card";
+@import "../node_modules/bootstrap/scss/badge";
+@import "../node_modules/bootstrap/scss/progress";
+@import "../node_modules/bootstrap/scss/list-group";
+@import "../node_modules/bootstrap/scss/close";
+@import "../node_modules/bootstrap/scss/helpers";
+@import "../node_modules/bootstrap/scss/utilities/api";
+
+// ================================================== Réglages fins
+
+h1, h2, h3, .h1, .h2, .h3, .navbar-brand, .stat {
+  letter-spacing: -.019em;
+  text-wrap: balance;
+}
+h4, h5, h6, .h4, .h5, .h6 { letter-spacing: -.008em; }
+
+.num, .stat, .badge, .axis-count, time { font-variant-numeric: tabular-nums; }
+
+// L'allemand compose des mots longs : césure en colonne étroite.
+html[lang="de"] p,
+html[lang="de"] .sidebar,
+html[lang="de"] .practice-title { hyphens: auto; }
+
+// ------------------------------------------------------- Identité
+.navbar { border-bottom: 2px solid $ch-red; }
+.navbar-brand { font-weight: 600; }
+.brand-ch { color: $ch-red-light; }
+
+.masthead { border-top: 3px solid var(--bs-body-color); padding-top: 1rem; position: relative; }
+.masthead::before {
+  content: ""; position: absolute; top: -3px; left: 0;
+  width: 3.5rem; height: 3px; background: $ch-red;
+}
+.stamp {
+  font-size: .6875rem; letter-spacing: .06em; text-transform: uppercase;
+  color: var(--bs-secondary-color); font-variant-numeric: tabular-nums;
+}
+
+// Définition du cadre : l'énoncé qui porte l'acronyme. Les trois adjectifs
+// sont détachés en demi-gras, sans couleur : ils se lisent, ils ne décorent pas.
+.definition {
+  font-size: 1.1875rem;
+  line-height: 1.35;
+  letter-spacing: -.012em;
+  max-width: 46ch;
+  margin-bottom: .85rem;
+  padding-bottom: .85rem;
+  border-bottom: 1px solid $border-color;
+  text-wrap: pretty;
+}
+.definition strong { font-weight: 600; }
+
+// ------------------------------------- Panneaux dépliants (natifs)
+// <details>/<summary> : accordéon sans une ligne de JavaScript Bootstrap.
+// Filets horizontaux plutôt que boîtes : le contenu des panneaux partage
+// alors le même bord gauche que le registre, sans retrait parasite.
+.panel {
+  border: 0;
+  border-top: 1px solid $border-color;
+  border-bottom: 1px solid $border-color;
+}
+.panel > summary {
+  list-style: none; cursor: pointer; padding: .8rem 0;
+  display: flex; align-items: center; gap: .75rem;
+}
+.panel > summary::-webkit-details-marker { display: none; }
+.panel > summary:hover .panel-title { color: $primary; }
+.panel > summary::after {
+  content: ""; margin-left: auto; flex: 0 0 auto;
+  width: .5rem; height: .5rem;
+  border-right: 1.5px solid var(--bs-secondary-color);
+  border-bottom: 1.5px solid var(--bs-secondary-color);
+  transform: rotate(45deg) translate(-2px,-2px);
+}
+.panel[open] > summary::after { transform: rotate(-135deg) translate(-2px,-2px); }
+.panel > .panel-body { padding: .25rem 0 1.25rem; }
+.panel-title { font-weight: 600; }
+.panel-meta { font-size: .8125rem; color: var(--bs-secondary-color); }
+
+// --------------------------------- Axe : filet gras + numéro d'ancrage
+.axis > summary {
+  border-top: 2px solid var(--bs-body-color);
+  background: #fff; align-items: baseline; padding: .6rem 0 .55rem;
+  flex-wrap: wrap;
+}
+.axis > summary:hover { background: #fafbfa; }
+.axis > summary::after { align-self: center; }
+.axis + .axis { border-top: 0; }
+.axis { border: 0; }
+.axis > .panel-body { padding: 0 0 1.5rem; }
+// Les pratiques épousent le bord gauche du registre.
+.axis .list-group-item { padding-left: 0; padding-right: 0; }
+.axis-no {
+  font-variant-numeric: tabular-nums; color: $primary; font-weight: 600;
+  min-width: 1.9rem; flex: 0 0 auto;
+}
+.axis-name { font-weight: 600; font-size: .95rem; }
+.axis-count { font-size: .8125rem; color: var(--bs-secondary-color); white-space: nowrap; }
+// La barre occupe toute la largeur et passe donc à la ligne. Sans cet ordre
+// explicite, le chevron la suivrait et tomberait sur une troisième ligne.
+.axis-bar { flex: 0 0 100%; height: .1875rem; margin-top: .5rem; order: 1; }
+.axis > summary::after { order: 0; }
+
+// ------------------------------------------------------------ Cadran
+.stat { font-size: 2.75rem; font-weight: 300; line-height: 1; letter-spacing: -.035em; }
+.stat .of { font-weight: 400; font-size: .5em; color: var(--bs-secondary-color); }
+
+// ---------------------------------------------------------- Pastille
+.dot {
+  display: inline-block; width: .7rem; height: .7rem;
+  border: 1px solid #b9bdb8; flex: 0 0 auto; vertical-align: -1px;
+  print-color-adjust: exact; -webkit-print-color-adjust: exact;
+}
+.dot-fait { background: $primary; border-color: $primary; }
+.dot-prog { border-color: $warning; background: linear-gradient(to top, $warning 50%, transparent 50%); }
+.dot-na   { position: relative; }
+.dot-na::after {
+  content: ""; position: absolute; inset: -1px;
+  background: linear-gradient(to top right, transparent calc(50% - .5px), #b9bdb8 calc(50% - .5px), #b9bdb8 calc(50% + .5px), transparent calc(50% + .5px));
+}
+
+// --------------------------------------------------------- Pratiques
+.list-group-item { padding-top: .9rem; padding-bottom: .9rem; }
+.list-group-item.is-na .practice-title { text-decoration: line-through; color: var(--bs-secondary-color); }
+.practice-title { line-height: 1.3; }
+
+// Deux rails : les marques à gauche, tout le texte sur un seul alignement.
+// Le titre, la description, les étiquettes et la note commencent au même x,
+// calé sur le rail du nom d'axe (1.9rem).
+.prac { display: flex; align-items: flex-start; }
+.prac > .dot { margin: .3rem 1.2rem 0 0; }
+.prac-body { min-width: 0; flex: 1 1 auto; }
+
+// Note : repliée par défaut, avec un témoin quand elle est remplie.
+.note > summary {
+  list-style: none; cursor: pointer; font-size: .8125rem;
+  color: var(--bs-secondary-color); padding: .15rem 0;
+}
+.note > summary::-webkit-details-marker { display: none; }
+.note > summary::before { content: "+"; display: inline-block; width: 1em; color: $primary; font-weight: 600; }
+.note[open] > summary::before { content: "\2013"; }
+.note.has-note > summary::after {
+  content: ""; display: inline-block; width: .35rem; height: .35rem;
+  background: $primary; margin-left: .4rem; vertical-align: .15em;
+}
+
+// Gouttière un peu plus généreuse sur petit écran.
+@include media-breakpoint-down(lg) {
+  .container-xl { --bs-gutter-x: 2rem; }
+  .lay-side { display: block; margin-bottom: 2.25rem; }
+  .lay-side .card { border: 0; }
+  .lay-side .card-body { padding: 0 0 1.25rem; border-bottom: 1px solid $border-color; }
+}
+
+// ====================================================== Mise en page
+// L'ordre du document est l'ordre de lecture sur téléphone :
+//   identité et profil · état et données · registre.
+// Sur écran large, une grille remet l'état et les données en colonne
+// de droite, sans dupliquer le moindre élément dans le balisage.
+:root { --nav-h: 3.5rem; }
+.navbar { min-height: var(--nav-h); }
+
+@include media-breakpoint-up(lg) {
+  .layout {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+    grid-template-areas:
+      "head side"
+      "main side";
+    column-gap: 2.5rem;
+  }
+  .lay-head { grid-area: head; }
+  .lay-side { grid-area: side; }
+  .lay-main { grid-area: main; }
+  .side-inner { position: sticky; top: calc(var(--nav-h) + 1rem); }
+}
+
+// -------------------------------------------------- Barre d'outils
+// Reste sous le bandeau pendant tout le défilement du registre :
+// filtrer n'oblige jamais à remonter.
+.toolbar {
+  position: sticky;
+  top: var(--nav-h);
+  z-index: 1010;
+  background: #fff;
+  border-top: 1px solid $border-color;
+  border-bottom: 1px solid $border-color;
+  padding: .5rem 0 .55rem;
+  margin-bottom: 1rem;
+}
+.tb-row { display: flex; align-items: center; gap: .5rem; }
+.tb-count {
+  font-size: .8125rem; color: var(--bs-secondary-color);
+  white-space: nowrap; font-variant-numeric: tabular-nums;
+}
+.tb-bar { flex: 1 1 auto; min-width: 2rem; height: .25rem; }
+.tb-search { flex: 0 1 11rem; }
+
+// Les filtres tiennent sur une seule ligne, que l'on fait défiler
+// du pouce plutôt que de laisser s'empiler sur trois rangs.
+.tb-chips {
+  display: flex; flex-wrap: nowrap; gap: .25rem;
+  margin-top: .45rem; padding-bottom: .15rem;
+  overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch;
+}
+.tb-chips::-webkit-scrollbar { display: none; }
+.tb-chips .btn { white-space: nowrap; }
+
+@include media-breakpoint-up(lg) {
+  .toolbar { display: flex; align-items: center; gap: .75rem; }
+  .tb-count, .tb-bar { display: none; }   // le cadran de droite les porte déjà
+  .tb-row { flex: 0 1 16rem; }
+  .tb-search { flex: 1 1 auto; }
+  .tb-chips { margin-top: 0; overflow: visible; flex-wrap: wrap; }
+}
+.saved { font-size: .75rem; color: var(--bs-secondary-color); }
+.saved.is-on::before {
+  content: ""; display: inline-block; width: .4rem; height: .4rem;
+  background: $primary; margin-right: .4rem; vertical-align: .1em;
+}
+
+// ---------------------------------------------- Dialogue d'effacement
+dialog {
+  border: 1px solid var(--bs-body-color); padding: 0; max-width: 26rem; width: calc(100% - 2rem);
+  color: var(--bs-body-color); background: #fff;
+}
+dialog::backdrop { background: rgba(18,20,22,.45); }
+
+.progress, .progress-stacked { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}
+
+// -------------------------------------------------------- Impression
+@media print {
+  .navbar, .sidebar, .d-print-none { display: none !important; }
+  main { width: 100% !important; max-width: none !important; flex: 0 0 100% !important; }
+  .panel > summary::after { display: none; }
+  .card, .list-group-item { border-color: #999 !important; break-inside: avoid; }
+  .axis > summary { break-after: avoid; }
+  a[href]::after { content: none !important; }
+}
